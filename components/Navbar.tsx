@@ -12,6 +12,8 @@ import { AiOutlineUser } from 'react-icons/ai'
 import { AiOutlinePlusCircle } from 'react-icons/ai'
 import { AiOutlineMinusCircle } from 'react-icons/ai'
 
+import { DetailFilterType, FilterProps } from '@/interface'
+
 import Calendar from 'react-calendar'
 
 import cn from 'classnames'
@@ -24,13 +26,6 @@ const menus = [
   { id: 3, title: 'FAQ', url: '/faqs' },
 ]
 
-type DetailFilterType = 'location' | 'checkIn' | 'checkOut' | 'guest'
-interface FilterProps {
-  location: string
-  checkIn: string
-  checkOut: string
-  guest: number
-}
 
 export default function Navbar() {
   const [showMenu, setShowMenu] = useState<boolean>(false)
