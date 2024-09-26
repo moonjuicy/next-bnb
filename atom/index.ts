@@ -1,6 +1,7 @@
-import { DetailFilterType, FilterProps } from '../interface';
-import { atom } from 'recoil';
-export const detailFilterAtom = atom<null | DetailFilterType>({
+import { DetailFilterType, FilterProps } from '@/interface'
+import { atom } from 'recoil'
+
+export const detailFilterState = atom<DetailFilterType | null>({
   key: 'detailFilter',
   default: null,
 })
