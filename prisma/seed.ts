@@ -1,9 +1,32 @@
 import { PrismaClient } from '@prisma/client'
 import { fakerKO as faker } from '@faker-js/faker'
-import { CATEGORY } from '@/constants'
 
 const prisma = new PrismaClient()
 
+export const CATEGORY = [
+  '전망좋은',
+  '자연',
+  '동굴',
+  '캠핑장',
+  '방',
+  '한옥',
+  '해변',
+  '국립공원',
+  '인기',
+  '수영장',
+  '농장',
+  '통나무집',
+  '디자인',
+  '스키',
+  '호수',
+  '키즈',
+  '저택',
+  '신규',
+  '섬',
+  '주택',
+  '서핑',
+  '골프장',
+]
 
 async function seedUsers() {
   Array.from({ length: 10 }, (v, i) => i).forEach(async () => {
@@ -116,9 +139,25 @@ function getRandonLongtitude() {
     ?.toString()
 }
 
+async function seedFaqs() {
+  Array.from({ length: 10 }, (v, i) => i).forEach(async () => {
+    const faqData = {
+      title: faker.lorem.words(),
+      desc: faker.lorem.paragraph(),
+    }
+
+    const res = await prisma.faq.create({
+      data: faqData,
+    })
+
+    console.log(res)
+  })
+}
+
 async function main() {
   // await seedUsers()
-  await seedRooms()
+  // await seedRooms()
+  await seedFaqs()
 }
 
 main()

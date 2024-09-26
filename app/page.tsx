@@ -1,30 +1,24 @@
-import CategoryList from "@/components/CategoryList"
-import { GridLayout, RoomItem } from "@/components/RoomList"
-import { RoomType } from "@/interface"
+'use client'
 
-export default async function Home() {
-  const data: RoomType[]  = await getRooms()
+import CategoryList from '@/components/CategoryList'
+import Loader from '@/components/Loader'
+import { GridLayout, RoomItem } from '@/components/RoomList'
+import { RoomType } from '@/interface'
+import { useQuery } from 'react-query'
 
+export default function Home() {
+  const fetchRoom = async () => {
+    const res = await fetch('/api/room')
+    const data = await res.json()
+    return data
+  }
+
+  const { data, isError, isLoading } = useQuery('rooms', fetchRoom)
+  if (isLoading) return <Loader className="mt-60 mb-40" />
   return (
     <>
-    <CategoryList />
-    <GridLayout>
-      {data?.map((room) => (
-        <RoomItem key={room.id} room={room} />
-      ))}
-    </GridLayout>
+      <CategoryList />
+      <GridLayout>{data?.map((room: RoomType) => <RoomItem key={room.id} room={room} />)}</GridLayout>
     </>
   )
-}
-
-async function getRooms() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/room`, {
-    cache: 'force-cache',
-  })
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch data')
-  } else {
-    return res.json()
-  }
 }
