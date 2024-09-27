@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import { useState } from 'react'
@@ -16,16 +17,23 @@ import Link from 'next/link'
 import { SearchFilter } from './Filter'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { detailFilterState, filterState } from '@/atom'
+import { signOut, useSession } from 'next-auth/react'
 
-const menus = [
-  { id: 1, title: '로그인', url: '/users/login' },
-  { id: 2, title: '회원가입', url: '/users/signup' },
+const LOGIN_USER_MENU = [
+  { id: 1, title: '로그인', url: '/users/signin' },
+  { id: 2, title: '회원가입', url: '/users/signin' },
   { id: 3, title: 'FAQ', url: '/faqs' },
+]
+
+const LOGOUT_USER_MENU = [
+  { id: 1, title: '로그아웃', url: '#', signOut: true },
+  { id: 2, title: 'FAQ', url: '/faqs' },
 ]
 
 export default function Navbar() {
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const [showFilter, setShowFilter] = useState<boolean>(false)
+  const { status, data: session } = useSession()
   const [detailFilter, setDetailFilter] = useRecoilState(detailFilterState)
   const filterValue = useRecoilValue(filterState)
 
@@ -191,20 +199,46 @@ export default function Navbar() {
           className="flex align-middle gap-3 rounded-full border border-gray-20 shadow-sm px-4 py-3 my-auto hover:shadow-lg"
         >
           <AiOutlineMenu />
-          <AiOutlineUser />
+          {status === 'authenticated' && session?.user?.image ? (
+            <img
+              src={session?.user?.image}
+              alt="profile img"
+              className="rounded-full w-4 h-4 my-auto"
+            />
+          ) : (
+            <AiOutlineUser />
+          )}
         </button>
         {showMenu && (
           <div className="border border-gray-200 shadow-lg py-2 flex flex-col absolute top-12 bg-white w-60 rounded-lg">
-            {menus?.map((menu) => (
-              <button
-                type="button"
-                key={menu.id}
-                className="h-10 hover:bg-gray-50 pl-3 text-sm text-gray-700 text-left"
-                onClick={() => router.push(menu.url)}
-              >
-                {menu.title}
-              </button>
-            ))}
+            {status === 'unauthenticated'
+              ? LOGIN_USER_MENU?.map((menu) => (
+                  <button
+                    type="button"
+                    key={menu.id}
+                    className="h-10 hover:bg-gray-50 pl-3 text-sm text-gray-700 text-left"
+                    onClick={() => {
+                      router.push(menu.url)
+                      setShowMenu(false)
+                    }}
+                  >
+                    {menu.title}
+                  </button>
+                ))
+              : LOGOUT_USER_MENU?.map((menu) => (
+                  <button
+                    type="button"
+                    key={menu.id}
+                    className="h-10 hover:bg-gray-50 pl-3 text-sm text-gray-700 text-left"
+                    onClick={() => {
+                      menu.signOut ? signOut({ callbackUrl: '/' }) : null
+                      router.push(menu.url)
+                      setShowMenu(false)
+                    }}
+                  >
+                    {menu.title}
+                  </button>
+                ))}
           </div>
         )}
       </div>
