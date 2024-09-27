@@ -1,10 +1,11 @@
 'use client'
 
+import { useRecoilState } from 'recoil'
 import { selectedRoomState } from '@/atom'
 import { BLUR_IMAGE } from '@/constants'
+import Link from 'next/link'
 import Image from 'next/image'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
-import { useRecoilState } from 'recoil'
 
 export default function SelectedRoom() {
   const [selectedRoom, setSelectedRoom] = useRecoilState(selectedRoomState)
@@ -19,24 +20,27 @@ export default function SelectedRoom() {
           >
             <AiOutlineCloseCircle />
           </button>
-          <div className="rounded-lg-t h-[200px] overflow-hidden">
-            <Image
-              src={selectedRoom?.images?.[0]}
-              width={384}
-              height={384}
-              alt="room img"
-              placeholder="blur"
-              className="rounded-t-lg"
-              blurDataURL={BLUR_IMAGE}
-            />
-          </div>
-          <div className="p-4 font-semibold bg-white rounded-b-lg text-sm">
-            <div className="mt-2">{selectedRoom.title}</div>
-            <div className="mt-1 text-gray-400">{selectedRoom.address}</div>
-            <div className="mt-1 ">
-              {selectedRoom.price?.toLocaleString()}원 <span className="text-gray-400"> /박</span>
+          <Link href={`/rooms/${selectedRoom.id}`}>
+            <div className="rounded-lg-t h-[200px] overflow-hidden">
+              <Image
+                src={selectedRoom?.images?.[0]}
+                width={384}
+                height={384}
+                alt="room img"
+                placeholder="blur"
+                className="rounded-t-lg"
+                blurDataURL={BLUR_IMAGE}
+              />
             </div>
-          </div>
+            <div className="p-4 font-semibold bg-white rounded-b-lg text-sm">
+              <div className="mt-2">{selectedRoom.title}</div>
+              <div className="mt-1 text-gray-400">{selectedRoom.address}</div>
+              <div className="mt-1 ">
+                {selectedRoom.price?.toLocaleString()}원{' '}
+                <span className="text-gray-400"> /박</span>
+              </div>
+            </div>
+          </Link>
         </div>
       )}
     </div>
