@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
 import { useState } from 'react'
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { detailFilterState, filterState } from '@/atom'
 import FilterLayout from './layout'
 
@@ -77,6 +77,8 @@ const CheckInFilter = () => {
       isShow={detailFilter === 'checkIn'}
     >
       <Calendar
+        next2Label={null}
+        prev2Label={null}
         className="mt-8 mx-auto"
         onChange={onChange}
         minDate={new Date()}
@@ -107,6 +109,8 @@ const CheckOutFilter = () => {
       isShow={detailFilter === 'checkOut'}
     >
       <Calendar
+        next2Label={null}
+        prev2Label={null}
         className="mt-8 mx-auto"
         onChange={onChange}
         minDate={

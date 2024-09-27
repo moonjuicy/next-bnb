@@ -12,7 +12,6 @@ import { AiOutlineUser } from 'react-icons/ai'
 
 import cn from 'classnames'
 
-import { DetailFilterType, FilterProps } from '@/interface'
 import Link from 'next/link'
 import { SearchFilter } from './Filter'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -35,7 +34,7 @@ export default function Navbar() {
   return (
     <nav
       className={cn(
-        'h-20 z-10 border border-b-gray-20 w-full shadow-sm p-4 sm:px-10 flex justify-between items-center align-middle fixed top-0 bg-white',
+        'h-20 z-[20] border border-b-gray-20 w-full shadow-sm p-4 sm:px-10 flex justify-between items-center align-middle fixed top-0 bg-white',
         {
           '!h-44': showFilter === true,
           '!items-start': showFilter === true,
