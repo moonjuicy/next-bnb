@@ -59,3 +59,7 @@ export const CATEGORY_DATA = [
 
 export const BLUR_IMAGE =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mM8Ug8AAg0BRS8X/OoAAAAASUVORK5CYII='
+
+export const DEFAULT_LAT = '37.565337'
+export const DEFAULT_LNG = '126.9772095'
+export const ZOOM_LEVEL = 7
