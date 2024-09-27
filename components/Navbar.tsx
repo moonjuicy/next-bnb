@@ -19,15 +19,16 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { detailFilterState, filterState } from '@/atom'
 import { signOut, useSession } from 'next-auth/react'
 
-const LOGIN_USER_MENU = [
+const LOGOUT_USER_MENU = [
   { id: 1, title: '로그인', url: '/users/signin' },
   { id: 2, title: '회원가입', url: '/users/signin' },
   { id: 3, title: 'FAQ', url: '/faqs' },
 ]
 
-const LOGOUT_USER_MENU = [
-  { id: 1, title: '로그아웃', url: '#', signOut: true },
+const LOGIN_USER_MENU = [
+  { id: 1, title: '마이페이지', url: '/users/mypage' },
   { id: 2, title: 'FAQ', url: '/faqs' },
+  { id: 3, title: '로그아웃', url: '#', signOut: true },
 ]
 
 export default function Navbar() {
@@ -212,7 +213,7 @@ export default function Navbar() {
         {showMenu && (
           <div className="border border-gray-200 shadow-lg py-2 flex flex-col absolute top-12 bg-white w-60 rounded-lg">
             {status === 'unauthenticated'
-              ? LOGIN_USER_MENU?.map((menu) => (
+              ? LOGOUT_USER_MENU?.map((menu) => (
                   <button
                     type="button"
                     key={menu.id}
@@ -225,7 +226,7 @@ export default function Navbar() {
                     {menu.title}
                   </button>
                 ))
-              : LOGOUT_USER_MENU?.map((menu) => (
+              : LOGIN_USER_MENU?.map((menu) => (
                   <button
                     type="button"
                     key={menu.id}
