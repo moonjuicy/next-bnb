@@ -56,3 +56,6 @@ export const CATEGORY_DATA = [
   { title: '신규', Icon: GiStarKey },
   { title: '서핑', Icon: MdOutlineSurfing },
 ]
+
+export const BLUR_IMAGE =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mM8Ug8AAg0BRS8X/OoAAAAASUVORK5CYII='

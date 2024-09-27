@@ -1,3 +1,4 @@
+import { BLUR_IMAGE } from '@/constants'
 import { RoomType } from '@/interface'
 import Image from 'next/image'
 export function RoomItem({ room }: { room: RoomType }) {
@@ -10,7 +11,7 @@ export function RoomItem({ room }: { room: RoomType }) {
         width={300}
         height={300}
         placeholder="blur"
-        blurDataURL={'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPknzWrHgADxwHERIJN5gAAAABJRU5ErkJggg=='}
+        blurDataURL={BLUR_IMAGE}
       />
       <div className="mt-2 font-semibold text-sm">{room.title}</div>
       <span className="text-xs px-2 py-1 rounded-full bg-black text-white mt-1">
