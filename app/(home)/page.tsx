@@ -5,13 +5,15 @@ import CategoryList from '@/components/CategoryList'
 import { GridLayout, RoomItem } from '@/components/RoomList'
 import { useInfiniteQuery } from 'react-query'
 import { useRouter } from 'next/navigation'
+
 import axios from 'axios'
 
 import { RoomType } from '@/interface'
 import { Loader, LoaderGrid } from '@/components/Loader'
 import useIntersectionObserver from '@/hooks/useIntersectionObserver'
 
-import {BsMap} from 'react-icons/bs';
+import { BsMap } from 'react-icons/bs'
+import { MapButton } from '@/components/Map'
 
 export default function Home() {
   const router = useRouter()
@@ -73,7 +75,7 @@ export default function Home() {
           ))
         )}
       </GridLayout>
-      <button onClick={() => router.push('/map')} className='flex gap-2 items-center text-sm bg-black rounded-full text-white px-5 py-3.5 mx-auto sticky bottom-10'>지도 표시하기 <BsMap className='text-xs' /> </button>
+      <MapButton onClick={() => router.push('/map')} />
       {(isFetching || hasNextPage || isFetchingNextPage) && <Loader />}
       <div className="w-full touch-none h-10 mb-10" ref={ref} />
     </>
