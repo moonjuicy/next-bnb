@@ -20,8 +20,8 @@ import { detailFilterState, filterState } from '@/atom'
 import { signOut, useSession } from 'next-auth/react'
 
 const LOGOUT_USER_MENU = [
-  { id: 1, title: '로그인', url: '/users/signin' },
-  { id: 2, title: '회원가입', url: '/users/signin' },
+  { id: 1, title: '로그인', url: '/users/login' },
+  { id: 2, title: '회원가입', url: '/users/login' },
   { id: 3, title: 'FAQ', url: '/faqs' },
 ]
 

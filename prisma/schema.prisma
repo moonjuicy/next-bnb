@@ -51,6 +51,8 @@ model User {
   email       String?    @unique
   name        String?
   image       String?
+  phone       String?
+  address     String?
   desc        String?
   emailVerified  Boolean?
   rooms       Room[]

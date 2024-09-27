@@ -1,12 +1,16 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import { UserType } from '@/interface'
 import axios from 'axios'
 import { signOut, useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { useQuery } from 'react-query'
 
-export default function UserInfo() {
+export default function UserInfoPage() {
+  const router = useRouter()
   const { status } = useSession()
+
   const fetchUser = async () => {
     const { data } = await axios('/api/users')
     return data as UserType
@@ -21,6 +25,7 @@ export default function UserInfo() {
       <div className="flex justify-between gap-4">
         <h1 className="text-3xl font-semibold">개인정보</h1>
         <button
+          onClick={() => router.push('/users/edit')}
           type="button"
           className="text-sm font-semibold underline px-4 py-1.5 rounded-md hover:bg-black/5"
         >
@@ -56,7 +61,9 @@ export default function UserInfo() {
         </div>
         <div className="flex flex-col gap-2 border-b-gray-200 border-b py-4">
           <h1 className="font-semibold">로그인한 SNS</h1>
-          <div className="text-gray-500 text-sm">{user?.account?.[0]?.provider || '-'}</div>
+          <div className="text-gray-500 text-sm">
+            {user?.account?.[0]?.provider || '-'}
+          </div>
         </div>
         <div className="flex flex-col gap-2 border-b-gray-200 border-b py-4">
           <h1 className="font-semibold">로그아웃</h1>
