@@ -17,7 +17,7 @@ export default function Home() {
   const isPageEnd = !!pageRef?.isIntersecting
 
   const fetchRooms = async ({ pageParam = 1 }) => {
-    const { data } = await axios('/api/rooms', {
+    const { data } = await axios('/api/rooms?page=' + pageParam, {
       params: {
         limit: 12,
         page: pageParam,
@@ -39,6 +39,10 @@ export default function Home() {
     getNextPageParam: (lastPage, pages) =>
       lastPage?.data?.length > 0 ? lastPage.page + 1 : undefined,
   })
+
+  if (isError) {
+    throw new Error('Room API Fetching Error')
+  }
 
   useEffect(() => {
     let timerId: NodeJS.Timeout | undefined
