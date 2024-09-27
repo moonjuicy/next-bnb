@@ -1,11 +1,12 @@
-import React from 'react'
 import cn from 'classnames'
+
 import Calendar from 'react-calendar'
+
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
 import { useState } from 'react'
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { detailFilterState, filterState } from '@/atom'
 import FilterLayout from './layout'
 
