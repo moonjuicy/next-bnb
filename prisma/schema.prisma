@@ -11,19 +11,19 @@ datasource db {
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  refresh_token_expires_in    Int?
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                       String  @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String? @db.Text
+  refresh_token_expires_in Int?
+  access_token             String? @db.Text
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String? @db.Text
+  session_state            String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -47,21 +47,31 @@ model VerificationToken {
 }
 
 model User {
-  id          String     @id @default(uuid())
-  email       String?    @unique
-  name        String?
-  image       String?
-  phone       String?
-  address     String?
-  desc        String?
-  emailVerified  Boolean?
-  rooms       Room[]
-  account     Account[]
-  sessions    Session[]
+  id            String    @id @default(uuid())
+  email         String?   @unique
+  name          String?
+  image         String?
+  desc          String?
+  emailVerified Boolean?
+  phone         String?
+  address       String?
+  rooms         Room[]
+  accounts      Account[]
+  sessions      Session[]
+  likes         Like[]
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  userId    String
+  roomId    Int
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Room {
-  id                Int         @id @default(autoincrement())
+  id                Int      @id @default(autoincrement())
   title             String
   images            String[]
   address           String
@@ -71,23 +81,26 @@ model Room {
   desc              String
   price             Int
   bedroomDesc       String?
-  freeCancel        Boolean     @default(false)
-  selfCheckIn       Boolean     @default(false)
-  officeSpace       Boolean     @default(false)
-  hasMountainView   Boolean     @default(false)
-  hasShampoo        Boolean     @default(false)
-  hasFreeLaundry    Boolean     @default(false)
-  hasAirConditioner Boolean     @default(false)
-  hasWifi           Boolean     @default(false)
-  hasBarbeque       Boolean     @default(false)
-  hasFreeParking    Boolean     @default(false)
+  freeCancel        Boolean  @default(false)
+  selfCheckIn       Boolean  @default(false)
+  officeSpace       Boolean  @default(false)
+  hasMountainView   Boolean  @default(false)
+  hasShampoo        Boolean  @default(false)
+  hasFreeLaundry    Boolean  @default(false)
+  hasAirConditioner Boolean  @default(false)
+  hasWifi           Boolean  @default(false)
+  hasBarbeque       Boolean  @default(false)
+  hasFreeParking    Boolean  @default(false)
   userId            String?
-  user              User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  likes             Like[]
+  user              User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId])
 }
 
 model Faq {
-  id              Int         @id @default(autoincrement())
-  title           String
-  desc            String
+  id    Int    @id @default(autoincrement())
+  title String
+  desc  String
 }
