@@ -21,12 +21,31 @@ export interface FilterLayoutProps {
   children: ReactNode
   isShow: boolean
 }
+
 export interface LikeType {
   id: number
   roomId: number
   userId: number
   createdAt: string
 }
+
+export interface CommentType {
+  id: number
+  createdAt: string
+  roomId: number
+  userId: string
+  body: string
+  room: RoomType
+  user: UserType
+}
+
+export interface CommentApiType {
+  totalCount: number
+  data: CommentType[]
+  page?: number
+  totalPage?: number
+}
+
 export interface RoomType {
   id: number
   images: string[]
@@ -51,6 +70,7 @@ export interface RoomType {
   hasBarbeque: boolean
   hasFreeParking: boolean
   likes?: LikeType[]
+  comments?: CommentType[]
 }
 
 interface Account {
@@ -65,9 +85,10 @@ export interface UserType {
   image?: string
   desc?: string
   rooms?: RoomType[]
-  account: Account[]
+  accounts: Account[]
   address?: string
   phone?: string
+  comments?: Comment[]
 }
 
 export interface FaqType {
