@@ -2,11 +2,7 @@ import { RoomType } from '@/interface'
 import Image from 'next/image'
 import BookingSection from './BookingSection'
 
-import {
-  AiOutlineCheckCircle,
-  AiOutlineDesktop,
-  AiOutlineWifi,
-} from 'react-icons/ai'
+import { AiOutlineCheckCircle, AiOutlineDesktop, AiOutlineWifi } from 'react-icons/ai'
 import { BsDoorClosed, BsFan } from 'react-icons/bs'
 import { PiMountainsDuotone, PiBathtub } from 'react-icons/pi'
 import { MdOutlineLocalLaundryService } from 'react-icons/md'
@@ -44,9 +40,7 @@ export default function FeatureSection({ data }: { data: RoomType }) {
             <div>
               <div className="font-semibold">무료 취소</div>
               <div className="text-sm text-gray-400">
-                {data?.freeCancel
-                  ? FeatureDesc.FREE_CANCEL
-                  : FeatureDesc.PAID_CANCEL}
+                {data?.freeCancel ? FeatureDesc.FREE_CANCEL : FeatureDesc.PAID_CANCEL}
               </div>
             </div>
           </div>
@@ -55,9 +49,7 @@ export default function FeatureSection({ data }: { data: RoomType }) {
             <div>
               <div className="font-semibold">셀프 체크인</div>
               <div className="text-sm text-gray-400">
-                {data?.selfCheckIn
-                  ? FeatureDesc.SELF_CHECKIN
-                  : FeatureDesc.SELF_CHECKIN_DISALLOWED}
+                {data?.selfCheckIn ? FeatureDesc.SELF_CHECKIN : FeatureDesc.SELF_CHECKIN_DISALLOWED}
               </div>
             </div>
           </div>
@@ -66,9 +58,7 @@ export default function FeatureSection({ data }: { data: RoomType }) {
             <div>
               <div className="font-semibold">사무 시설</div>
               <div className="text-sm text-gray-400">
-                {data?.officeSpace
-                  ? FeatureDesc.FREE_OFFICE_SPACE
-                  : FeatureDesc.NO_OFFICE_SPACE}
+                {data?.officeSpace ? FeatureDesc.FREE_OFFICE_SPACE : FeatureDesc.NO_OFFICE_SPACE}
               </div>
             </div>
           </div>
@@ -189,12 +179,6 @@ export default function FeatureSection({ data }: { data: RoomType }) {
         <div className="py-8 px-4 border-b border-gray-300 leading-8 text-gray-800">
           <h1 className="font-semibold text-xl mb-2">캘린더</h1>
           <CalendarSection />
-        </div>
-        <div className="py-8 px-4 border-b border-gray-300 leading-8 text-gray-800">
-          <h1 className="font-semibold text-xl mb-2">후기</h1>
-          <div className="mt-4 rounded-lg p-5 border border-gray-300">
-            후기가 들어갑니다
-          </div>
         </div>
       </div>
       <BookingSection data={data} />

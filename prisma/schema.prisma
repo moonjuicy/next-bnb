@@ -59,6 +59,19 @@ model User {
   accounts      Account[]
   sessions      Session[]
   likes         Like[]
+  comments      Comment[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  body      String
+  roomId    Int
+  userId    String
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, roomId])
 }
 
 model Like {
@@ -71,7 +84,7 @@ model Like {
 }
 
 model Room {
-  id                Int      @id @default(autoincrement())
+  id                Int       @id @default(autoincrement())
   title             String
   images            String[]
   address           String
@@ -81,20 +94,21 @@ model Room {
   desc              String
   price             Int
   bedroomDesc       String?
-  freeCancel        Boolean  @default(false)
-  selfCheckIn       Boolean  @default(false)
-  officeSpace       Boolean  @default(false)
-  hasMountainView   Boolean  @default(false)
-  hasShampoo        Boolean  @default(false)
-  hasFreeLaundry    Boolean  @default(false)
-  hasAirConditioner Boolean  @default(false)
-  hasWifi           Boolean  @default(false)
-  hasBarbeque       Boolean  @default(false)
-  hasFreeParking    Boolean  @default(false)
+  freeCancel        Boolean   @default(false)
+  selfCheckIn       Boolean   @default(false)
+  officeSpace       Boolean   @default(false)
+  hasMountainView   Boolean   @default(false)
+  hasShampoo        Boolean   @default(false)
+  hasFreeLaundry    Boolean   @default(false)
+  hasAirConditioner Boolean   @default(false)
+  hasWifi           Boolean   @default(false)
+  hasBarbeque       Boolean   @default(false)
+  hasFreeParking    Boolean   @default(false)
   userId            String?
-  createdAt         DateTime @default(now())
+  createdAt         DateTime  @default(now())
   likes             Like[]
-  user              User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments          Comment[]
+  user              User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
