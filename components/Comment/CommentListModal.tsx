@@ -1,7 +1,7 @@
 'use client'
 
 /* eslint-disable @next/next/no-img-element */
-import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
+import { Dialog, Transition } from '@headlessui/react'
 import React, { Fragment, useEffect, useRef } from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
 import axios from 'axios'
@@ -9,6 +9,9 @@ import { useInfiniteQuery } from 'react-query'
 import { CommentApiType, CommentType } from '@/interface'
 import useIntersectionObserver from '@/hooks/useIntersectionObserver'
 import { Loader } from '../Loader'
+
+import dayjs from 'dayjs'
+import 'dayjs/locale/ko'
 
 export default function CommentListModal({
   isOpen,
@@ -27,7 +30,9 @@ export default function CommentListModal({
   const isPageEnd = !!pageRef?.isIntersecting
 
   const fetchComments = async ({ pageParam = 1 }) => {
-    const { data } = await axios(`/api/comments?roomId=${roomId}&page=${pageParam}&limit=6`)
+    const { data } = await axios(
+      `/api/comments?roomId=${roomId}&page=${pageParam}&limit=6`,
+    )
 
     return data as CommentApiType
   }
@@ -58,7 +63,7 @@ export default function CommentListModal({
     <>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-[100]" onClose={closeModal}>
-          <TransitionChild
+          <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0"
@@ -68,11 +73,11 @@ export default function CommentListModal({
             leaveTo="opacity-0"
           >
             <div className="fixed inset-0 bg-black/25" />
-          </TransitionChild>
+          </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <TransitionChild
+              <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
                 enterFrom="opacity-0 scale-95"
@@ -81,7 +86,7 @@ export default function CommentListModal({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <DialogPanel className="w-full max-w-3xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-3xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <button
                     type="button"
                     onClick={closeModal}
@@ -89,40 +94,57 @@ export default function CommentListModal({
                   >
                     <AiOutlineClose />
                   </button>
-                  <DialogTitle
+                  <Dialog.Title
                     as="h3"
                     className="text-xl md:text-2xl font-medium leading-6 text-gray-900"
                   >
                     후기 전체 보기
-                  </DialogTitle>
+                  </Dialog.Title>
                   <div className="mt-8 flex flex-col gap-8 mx-auto max-w-lg mb-10">
                     {comments?.pages?.map((page, index) => (
                       <React.Fragment key={index}>
                         {page.data.map((comment: CommentType) => (
-                          <div key={comment?.id} className="flex flex-col gap-2">
+                          <div
+                            key={comment?.id}
+                            className="flex flex-col gap-2"
+                          >
                             <div className="flex gap-2 items-center">
                               <img
-                                src={comment?.user?.image || '/images/user-icon.png'}
+                                src={
+                                  comment?.user?.image ||
+                                  '/images/user-icon.png'
+                                }
                                 alt="profile img"
                                 width={50}
                                 height={50}
                                 className="rounded-full"
                               />
                               <div>
-                                <h1 className="font-semibold">{comment?.user?.name || '-'}</h1>
-                                <div className="text-gray-500 text-xs">{comment?.createdAt}</div>
+                                <h1 className="font-semibold">
+                                  {comment?.user?.name || '-'}
+                                </h1>
+                                <div className="text-gray-500 text-xs">
+                                  {dayjs(comment?.createdAt)?.format(
+                                    'YYYY-MM-DD HH:MM:ss',
+                                  )}
+                                </div>
                               </div>
                             </div>
-                            <div className="max-w-lg text-gray-600">{comment?.body}</div>
+                            <div className="max-w-lg text-gray-600">
+                              {comment?.body}
+                            </div>
                           </div>
                         ))}
                       </React.Fragment>
                     ))}
                     {(hasNextPage || isFetching) && <Loader className="mt-8" />}
-                    <div ref={ref} className="w-full h-10 mb-10 z-10 touch-none" />
+                    <div
+                      ref={ref}
+                      className="w-full h-10 mb-10 z-10 touch-none"
+                    />
                   </div>
-                </DialogPanel>
-              </TransitionChild>
+                </Dialog.Panel>
+              </Transition.Child>
             </div>
           </div>
         </Dialog>

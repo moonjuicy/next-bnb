@@ -7,6 +7,9 @@ import CommentListModal from './CommentListModal'
 import { CommentApiType } from '@/interface'
 import { Loader } from '../Loader'
 
+import dayjs from 'dayjs'
+import 'dayjs/locale/ko'
+
 export default function CommentList({
   isLoading,
   comments,
@@ -28,7 +31,9 @@ export default function CommentList({
 
   return (
     <>
-      <h1 className="font-semibold text-xl mb-2">후기 {comments?.totalCount}개</h1>
+      <h1 className="font-semibold text-xl mb-2">
+        후기 {comments?.totalCount}개
+      </h1>
       <div className="mt-8 grid md:grid-cols-2 gap-12">
         {isLoading ? (
           <Loader className="md:col-span-2" />
@@ -44,8 +49,12 @@ export default function CommentList({
                   className="rounded-full"
                 />
                 <div>
-                  <h1 className="font-semibold">{comment?.user?.name || '-'}</h1>
-                  <div className="text-gray-500 text-xs">{comment?.createdAt}</div>
+                  <h1 className="font-semibold">
+                    {comment?.user?.name || '-'}
+                  </h1>
+                  <div className="text-gray-500 text-xs">
+                    {dayjs(comment?.createdAt)?.format('YYYY-MM-DD HH:MM:ss')}
+                  </div>
                 </div>
               </div>
               <div className="max-w-md text-gray-600">{comment?.body}</div>
@@ -70,7 +79,11 @@ export default function CommentList({
         </button>
       </div>
       {isOpenModal && (
-        <CommentListModal isOpen={isOpenModal} closeModal={closeModal} roomId={roomId} />
+        <CommentListModal
+          isOpen={isOpenModal}
+          closeModal={closeModal}
+          roomId={roomId}
+        />
       )}
     </>
   )

@@ -5,6 +5,49 @@ import { authOptions } from '../auth/[...nextauth]/route'
 
 import prisma from '@/db'
 
+export async function GET(req: Request) {
+  const session = await getServerSession(authOptions)
+  const { searchParams } = new URL(req.url)
+  const page = searchParams.get('page') as string
+  const limit = searchParams.get('limit') as string
+  const skipPage = parseInt(page) - 1
+
+  if (!session?.user) {
+    return NextResponse.json(
+      {
+        error: 'unauthorized user',
+      },
+      { status: 401 },
+    )
+  }
+  const count = await prisma.like.count({
+    where: {
+      userId: session?.user?.id,
+    },
+  })
+
+  const likes = await prisma.like.findMany({
+    where: {
+      userId: session?.user?.id,
+    },
+    include: {
+      room: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },  
+    take: parseInt(limit),
+    skip: skipPage * parseInt(limit),
+  })
+
+  return NextResponse.json({
+    page: parseInt(page),
+    data: likes,
+    totalCount: count,
+    totalPage: Math.ceil(count / parseInt(limit)),
+  })
+}
+
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions)
 

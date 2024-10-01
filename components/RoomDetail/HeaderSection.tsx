@@ -3,8 +3,6 @@
 import { useState } from 'react'
 import { RoomType } from '@/interface'
 
-import { CiShare1 } from 'react-icons/ci'
-import { CiHeart } from 'react-icons/ci'
 import { AiOutlineUnorderedList } from 'react-icons/ai'
 
 import Image from 'next/image'
