@@ -2,13 +2,25 @@
 
 import { filterState } from '@/atom'
 import { RoomType } from '@/interface'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
+import { calculatedFilterState } from '@/atom/selector'
+import { useRouter } from 'next/navigation'
 
 export default function BookingSection({ data }: { data: RoomType }) {
+  const router = useRouter()
   const [filterValue, setFilterValue] = useRecoilState(filterState)
+  const { dayCount, guestCount } = useRecoilValue(calculatedFilterState)
+
+  const totalAmount = data?.price * dayCount
+  const checkFormValid = totalAmount > 0 && guestCount > 0
+
+  const handleSubmit = () =>
+    router.push(
+      `/rooms/${data.id}/bookings?checkIn=${filterValue?.checkIn}&checkOut=${filterValue?.checkOut}&guestCount=${guestCount}&totalAmount=${totalAmount}&totalDays=${dayCount}`,
+    )
 
   const onChangeCheckIn = (e: any) => {
     setFilterValue({
@@ -48,7 +60,7 @@ export default function BookingSection({ data }: { data: RoomType }) {
             <label className="text-xs font-semibold">체크인</label>
             <input
               type="date"
-              defaultValue={filterValue.checkIn || dayjs().format('YYYY-MM-DD')}
+              value={filterValue.checkIn || dayjs().format('YYYY-MM-DD')}
               min={dayjs().format('YYYY-MM-DD')}
               className="w-full px-4 py-3 border border-gray-400 rounded-md text-xs mt-1"
               onChange={onChangeCheckIn}
@@ -58,9 +70,7 @@ export default function BookingSection({ data }: { data: RoomType }) {
             <label className="text-xs font-semibold">체크아웃</label>
             <input
               type="date"
-              defaultValue={
-                filterValue.checkOut || dayjs().format('YYYY-MM-DD')
-              }
+              value={filterValue.checkOut || dayjs().format('YYYY-MM-DD')}
               min={filterValue.checkIn || dayjs().format('YYYY-MM-DD')}
               className="w-full px-4 py-3 border border-gray-400 rounded-md text-xs mt-1"
               onChange={onChangeCheckOut}
@@ -82,8 +92,10 @@ export default function BookingSection({ data }: { data: RoomType }) {
           </div>
           <div className="mt-6">
             <button
-              type="submit"
-              className="bg-rose-500 hover:bg-rose-600 text-white rounded-md py-2.5 w-full"
+              type="button"
+              disabled={!checkFormValid}
+              onClick={handleSubmit}
+              className="bg-rose-500 hover:bg-rose-600 text-white rounded-md py-2.5 w-full disabled:bg-gray-300"
             >
               예약하기
             </button>
@@ -95,9 +107,11 @@ export default function BookingSection({ data }: { data: RoomType }) {
         <div className="mt-4 flex flex-col gap-2 border-b border-b-gray-300 pb-4 text-xs md:text-sm">
           <div className="flex justify-between">
             <div className="text-gray-600 underline underline-offset-4">
-              {data?.price?.toLocaleString()} x 5박
+              {data?.price?.toLocaleString()} x {dayCount}박
             </div>
-            <div className="text-gray-500">₩271,470</div>
+            <div className="text-gray-500">
+              ₩{totalAmount?.toLocaleString()}
+            </div>
           </div>
           <div className="flex justify-between">
             <div className="text-gray-600 underline underline-offset-4">
@@ -107,7 +121,7 @@ export default function BookingSection({ data }: { data: RoomType }) {
           </div>
           <div className="flex justify-between mt-6">
             <div>총 합계</div>
-            <div>₩271,470</div>
+            <div>₩{totalAmount?.toLocaleString()}</div>
           </div>
         </div>
       </div>
