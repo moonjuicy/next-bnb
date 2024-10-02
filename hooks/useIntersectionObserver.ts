@@ -22,7 +22,13 @@ function useIntersectionObserver(
     observer.observe(node)
 
     return () => observer.disconnect()
-  }, [elementRef?.current, root, rootMargin, JSON.stringify(threshold), enableObserver])
+  }, [
+    elementRef?.current,
+    root,
+    rootMargin,
+    JSON.stringify(threshold),
+    enableObserver,
+  ])
 
   return entry
 }
