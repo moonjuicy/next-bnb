@@ -71,7 +71,7 @@ export default async function BookingPage({
                 {parseInt(totalAmount).toLocaleString()}원
               </div>
             </div>
-            <SubmitButton />
+            <SubmitButton title={data?.title} />
           </div>
         </div>
       </div>

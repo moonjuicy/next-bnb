@@ -11,11 +11,12 @@ interface BookingProps {
   guestCount: string
   totalAmount: string
   totalDays: string
+  status: 'SUCCESS' | 'CANCEL' | 'PENDING' | 'FAILED'
 }
 
 interface RefundProps {
   id: string
-  status: 'SUCCESS' | 'CANCEL'
+  status: 'SUCCESS' | 'CANCEL' | 'PENDING' | 'FAILED'
 }
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
@@ -27,7 +28,7 @@ export async function GET(req: Request) {
   if (id) {
     const booking = await prisma.booking.findFirst({
       where: {
-        id: id ? parseInt(id) : {},
+        id: id ? id : {},
       },
       include: {
         room: true,
@@ -37,15 +38,15 @@ export async function GET(req: Request) {
 
     return NextResponse.json(booking, { status: 200 })
   } else if (page) {
-    const count = await prisma.booking.count({
-      where: {
-        userId: userId,
-      },
-    })
-
     const skipPage = parseInt(page) - 1
     const bookings = await prisma.booking.findMany({
       orderBy: { updatedAt: 'desc' },
+      where: {
+        userId: userId,
+        NOT: {
+          status: 'PENDING',
+        },
+      },
       skip: skipPage * parseInt(limit),
       take: parseInt(limit),
       include: {
@@ -68,7 +69,8 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions)
   const formData = await req.json()
 
-  const { roomId, checkIn, checkOut, guestCount, totalAmount, totalDays }: BookingProps = formData
+  const { roomId, checkIn, checkOut, guestCount, totalAmount, totalDays, status }: BookingProps =
+    formData
 
   if (!session) {
     return NextResponse.json({ message: 'Unauthorized user' }, { status: 401 })
@@ -83,11 +85,11 @@ export async function POST(req: Request) {
       guestCount: parseInt(guestCount),
       totalAmount: parseInt(totalAmount),
       totalDays: parseInt(totalDays),
-      status: 'SUCCESS',
+      status: status,
     },
   })
 
-  return NextResponse.json(booking, { status: 201 })
+  return NextResponse.json(booking, { status: 200 })
 }
 
 export async function PATCH(req: Request) {
@@ -100,8 +102,8 @@ export async function PATCH(req: Request) {
   }
 
   const result = await prisma.booking.update({
-    where: { id: parseInt(id) },
-    data: { status: status  },
+    where: { id: id },
+    data: { status: status },
   })
 
   return NextResponse.json(result, { status: 200 })

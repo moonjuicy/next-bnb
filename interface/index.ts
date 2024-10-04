@@ -123,7 +123,7 @@ export interface BookingParamsProps {
 
 export interface BookingType {
   id: number
-  roomId: string
+  roomId: number
   userId: string
   checkIn: string
   checkOut: string
@@ -133,7 +133,33 @@ export interface BookingType {
   status: 'SUCCESS' | 'CANCEL'
   room: RoomType
   user: UserType
-  createdAt: string
+  createAt: string
   updatedAt: string
+  payments?: PaymentType[]
 }
 
+export enum PaymentStatus {
+  READY = 'READY',
+  IN_PROGRESS = 'IN_PROGRESS',
+  WAITING_FOR_DEPOSIT = 'WAITING_FOR_DEPOSIT',
+  DONE = 'DONE',
+  CANCELED = 'CANCELED',
+  PARTIAL_CANCELED = 'PARTIAL_CANCELED',
+  ABORTED = 'ABORTED',
+  EXPIRED = 'EXPIRED',
+}
+
+export interface PaymentType {
+  id: string
+  paymentKey: string
+  bookingId: string
+  amount: number
+  status: PaymentStatus
+  orderId: string
+  orderName: string
+  approvedAt: string
+  mId?: string
+  receiptUrl?: string
+  cardNumber?: string
+  method?: string
+}

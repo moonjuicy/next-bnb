@@ -1,11 +1,13 @@
 'use client'
 
 import axios from 'axios'
+import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams, useParams } from 'next/navigation'
 
 import toast from 'react-hot-toast'
 
-export default function SubmitButton() {
+export default function SubmitButton({title}: {title: string}) {
+  const {status, data: session} = useSession()
   const params = useParams()
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -25,11 +27,14 @@ export default function SubmitButton() {
       guestCount,
       totalAmount,
       totalDays,
+      status: 'PENDING',
     })
 
-    if (res.status === 201) {
+    if (res.status === 200) {
       toast.success('예약 성공')
-      router.replace(`/users/bookings/${res.data.id}`)
+      router.replace(
+        `/payments?customerKey=${session?.user.id}&roomTitle=${title}&checkIn=${checkIn}&checkOut=${checkOut}&guestCount=${guestCount}&totalAmount=${totalAmount}&totalDays=${totalDays}&bookingId=${res?.data.id}`,
+      )
     } else {
       toast.error('예약 실패')
     }
